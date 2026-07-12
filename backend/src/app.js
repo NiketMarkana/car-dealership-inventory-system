@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const authRoutes = require('./modules/auth/auth.routes');
+const notFoundMiddleware = require('./middleware/notFound.middleware');
+const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
 
@@ -15,5 +18,12 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Module routes
+app.use('/api/auth', authRoutes);
+
+// Fallback middlewares
+app.use(notFoundMiddleware);
+app.use(errorMiddleware);
 
 module.exports = app;
