@@ -63,6 +63,23 @@ export default function Vehicles() {
     }
   };
 
+  const restock = async (id) => {
+    const input = window.prompt('Enter restock quantity:');
+    if (!input) return;
+    const quantity = Number(input);
+    if (isNaN(quantity) || quantity <= 0) {
+      alert('Invalid quantity');
+      return;
+    }
+    try {
+      await api.post(`/vehicles/${id}/restock`, { quantity });
+      alert('Vehicle restocked successfully');
+      loadVehicles();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Restock failed');
+    }
+  };
+
   return (
     <div>
       <h2>Vehicle Inventory</h2>
@@ -104,6 +121,7 @@ export default function Vehicles() {
                   <Link to={`/admin/edit/${vehicle._id}`}>
                     <button>Edit</button>
                   </Link>
+                  <button onClick={() => restock(vehicle._id)}>Restock</button>
                   <button onClick={() => deleteVehicle(vehicle._id)}>Delete</button>
                 </>
               )}
