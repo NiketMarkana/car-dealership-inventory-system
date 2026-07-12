@@ -12,7 +12,7 @@ app.get('/api/health', (req, res) => {
     success: true,
     message: 'Car Dealership Inventory System API is healthy',
     environment: process.env.NODE_ENV || 'development',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
