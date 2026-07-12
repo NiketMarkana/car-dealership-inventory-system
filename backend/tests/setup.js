@@ -1,6 +1,17 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
+if (process.env.MONGODB_URI) {
+  const parts = process.env.MONGODB_URI.split('/');
+  const dbName = parts[parts.length - 1];
+  if (dbName && !dbName.endsWith('_test')) {
+    parts[parts.length - 1] = dbName.includes('?')
+      ? dbName.replace('?', '_test?')
+      : `${dbName}_test`;
+    process.env.MONGODB_URI = parts.join('/');
+  }
+}
+
 const mongoose = require('mongoose');
 const connectDatabase = require('../src/config/database');
 

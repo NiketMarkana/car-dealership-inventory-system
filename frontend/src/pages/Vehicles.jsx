@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 
+/**
+ * Page displaying the catalog of all vehicles with search, purchase, and admin actions.
+ * @returns {JSX.Element}
+ */
 export default function Vehicles() {
   const { user } = useContext(AuthContext);
   const [vehicles, setVehicles] = useState([]);
@@ -18,6 +22,9 @@ export default function Vehicles() {
     setFilteredVehicles(vehicles);
   }, [vehicles]);
 
+  /**
+   * Fetch all vehicles from the backend.
+   */
   const loadVehicles = async () => {
     try {
       const res = await api.get('/vehicles');
@@ -29,6 +36,9 @@ export default function Vehicles() {
     }
   };
 
+  /**
+   * Query backend to search vehicles by make.
+   */
   const handleSearch = async () => {
     try {
       const res = await api.get('/vehicles/search', {
@@ -42,6 +52,10 @@ export default function Vehicles() {
     }
   };
 
+  /**
+   * Trigger backend route to purchase a vehicle.
+   * @param {string} id - Vehicle ID
+   */
   const purchase = async (id) => {
     try {
       await api.post(`/vehicles/${id}/purchase`);
@@ -52,6 +66,10 @@ export default function Vehicles() {
     }
   };
 
+  /**
+   * Trigger backend route to delete a vehicle.
+   * @param {string} id - Vehicle ID
+   */
   const deleteVehicle = async (id) => {
     if (!window.confirm('Delete this vehicle?')) return;
     try {
@@ -63,6 +81,10 @@ export default function Vehicles() {
     }
   };
 
+  /**
+   * Prompt admin and trigger backend route to restock a vehicle.
+   * @param {string} id - Vehicle ID
+   */
   const restock = async (id) => {
     const input = window.prompt('Enter restock quantity:');
     if (!input) return;
@@ -115,7 +137,9 @@ export default function Vehicles() {
             <p>Available: {vehicle.quantity}</p>
 
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-              <button onClick={() => purchase(vehicle._id)}>Purchase</button>
+              <button onClick={() => purchase(vehicle._id)} disabled={vehicle.quantity === 0}>
+                {vehicle.quantity === 0 ? 'Out of Stock' : 'Purchase'}
+              </button>
               <Link to={`/vehicles/${vehicle._id}`}>
                 <button>View Details</button>
               </Link>
