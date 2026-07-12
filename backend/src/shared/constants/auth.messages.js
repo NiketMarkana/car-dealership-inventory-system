@@ -1,15 +1,9 @@
-const ROLES = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-};
-
 const AUTH_MESSAGES = {
+  EMAIL_ALREADY_EXISTS: 'Email already exists',
   USER_REGISTERED: 'User registered successfully',
-  EMAIL_EXISTS: 'Email already exists',
   INVALID_CREDENTIALS: 'Invalid email or password',
 };
 
 module.exports = {
-  ROLES,
   AUTH_MESSAGES,
 };

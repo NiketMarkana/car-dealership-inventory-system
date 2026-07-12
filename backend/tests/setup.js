@@ -3,11 +3,9 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const mongoose = require('mongoose');
 
-beforeAll(async () => {
-});
+beforeAll(async () => {});
 
-afterEach(async () => {
-});
+afterEach(async () => {});
 
 afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {

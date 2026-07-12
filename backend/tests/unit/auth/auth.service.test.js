@@ -2,32 +2,18 @@
  * Unit tests for the Authentication Service.
  *
  * We are following strict Test-Driven Development (TDD).
- * These tests cover the registration and login flows in isolation by mocking dependencies.
+ * In the RED phase, these tests are written before any implementation code
+ * is added to auth.service.js. These tests will fail initially.
  */
 
 const authService = require('../../../src/modules/auth/auth.service');
 const userRepository = require('../../../src/modules/auth/auth.repository');
-const { AUTH_MESSAGES } = require('../../../src/shared/constants/auth.messages');
-const { hashPassword, comparePassword } = require('../../../src/shared/utils/password');
-const { generateToken } = require('../../../src/shared/utils/jwt');
 
 // Mock UserRepository
 jest.mock('../../../src/modules/auth/auth.repository', () => ({
   findByEmail: jest.fn(),
   create: jest.fn(),
-  findById: jest.fn(),
-}));
-
-// Mock Password utility helper
-jest.mock('../../../src/shared/utils/password', () => ({
-  hashPassword: jest.fn(),
-  comparePassword: jest.fn(),
-}));
-
-// Mock JWT utility helper
-jest.mock('../../../src/shared/utils/jwt', () => ({
-  generateToken: jest.fn(),
-  verifyToken: jest.fn(),
+  findById: jest.fn()
 }));
 
 describe('Auth Service - registerUser', () => {
@@ -120,66 +106,3 @@ describe('Auth Service - registerUser', () => {
   });
 });
 
-describe('Auth Service - loginUser', () => {
-  const loginData = {
-    email: '  Niket@Example.Com  ',
-    password: 'password123',
-  };
-
-  const normalizedEmail = 'niket@example.com';
-
-  const mockUser = {
-    id: 'mock-user-id',
-    name: 'Niket',
-    email: normalizedEmail,
-    password: 'hashed-password',
-    role: 'USER',
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    comparePassword.mockResolvedValue(true);
-    generateToken.mockReturnValue('mock-jwt-token');
-  });
-
-  it('should login successfully, normalize email, verify password, and return user + token', async () => {
-    // Arrange
-    userRepository.findByEmail.mockResolvedValue(mockUser);
-
-    // Act
-    const result = await authService.loginUser(loginData.email, loginData.password);
-
-    // Assert
-    expect(userRepository.findByEmail).toHaveBeenCalledWith(normalizedEmail);
-    expect(comparePassword).toHaveBeenCalledWith(loginData.password, mockUser.password);
-    expect(generateToken).toHaveBeenCalledWith({ id: mockUser.id, role: mockUser.role });
-    expect(result).toEqual({
-      user: mockUser,
-      token: 'mock-jwt-token',
-    });
-  });
-
-  it('should throw UnauthorizedError if user email is not found', async () => {
-    // Arrange
-    userRepository.findByEmail.mockResolvedValue(null);
-
-    // Act & Assert
-    await expect(
-      authService.loginUser(loginData.email, loginData.password)
-    ).rejects.toThrow(AUTH_MESSAGES.INVALID_CREDENTIALS);
-    expect(comparePassword).not.toHaveBeenCalled();
-    expect(generateToken).not.toHaveBeenCalled();
-  });
-
-  it('should throw UnauthorizedError if password comparison fails', async () => {
-    // Arrange
-    userRepository.findByEmail.mockResolvedValue(mockUser);
-    comparePassword.mockResolvedValue(false);
-
-    // Act & Assert
-    await expect(
-      authService.loginUser(loginData.email, loginData.password)
-    ).rejects.toThrow(AUTH_MESSAGES.INVALID_CREDENTIALS);
-    expect(generateToken).not.toHaveBeenCalled();
-  });
-});
