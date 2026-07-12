@@ -116,6 +116,9 @@ export default function Vehicles() {
 
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <button onClick={() => purchase(vehicle._id)}>Purchase</button>
+              <Link to={`/vehicles/${vehicle._id}`}>
+                <button>View Details</button>
+              </Link>
               {user?.role === 'ADMIN' && (
                 <>
                   <Link to={`/admin/edit/${vehicle._id}`}>
