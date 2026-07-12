@@ -1,0 +1,1 @@
+// Auth Mongoose model definitions
