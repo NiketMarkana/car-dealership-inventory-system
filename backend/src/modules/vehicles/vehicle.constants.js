@@ -1,0 +1,11 @@
+const VEHICLE_CATEGORIES = {
+  SEDAN: 'SEDAN',
+  SUV: 'SUV',
+  HATCHBACK: 'HATCHBACK',
+  ELECTRIC: 'ELECTRIC',
+  OTHER: 'OTHER',
+};
+
+module.exports = {
+  VEHICLE_CATEGORIES,
+};
