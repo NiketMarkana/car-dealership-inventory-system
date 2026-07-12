@@ -73,9 +73,19 @@ const restockVehicle = async (req, res, next) => {
   }
 };
 
+const getVehicleById = async (req, res, next) => {
+  try {
+    const vehicle = await vehicleService.getVehicleById(req.params.id);
+    return sendSuccess(res, 'Vehicle retrieved successfully', vehicle);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createVehicle,
   getVehicles,
+  getVehicleById,
   searchVehicles,
   updateVehicle,
   deleteVehicle,

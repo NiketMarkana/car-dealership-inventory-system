@@ -98,9 +98,24 @@ const restockVehicle = async (id, quantity) => {
   });
 };
 
+/**
+ * Retrieve a vehicle by its ID.
+ * @param {string} id - Vehicle ID
+ * @returns {Promise<Object>} The vehicle instance
+ * @throws {NotFoundError} If the vehicle does not exist
+ */
+const getVehicleById = async (id) => {
+  const vehicle = await vehicleRepository.findById(id);
+  if (!vehicle) {
+    throw new NotFoundError('Vehicle not found');
+  }
+  return vehicle;
+};
+
 module.exports = {
   createVehicle,
   getAllVehicles,
+  getVehicleById,
   searchVehicles,
   updateVehicle,
   deleteVehicle,

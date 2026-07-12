@@ -5,6 +5,7 @@ import Vehicles from './pages/Vehicles';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AddVehicle from './pages/AddVehicle';
+import EditVehicle from './pages/EditVehicle';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
@@ -35,6 +36,14 @@ function App() {
           element={
             <ProtectedRoute adminOnly>
               <AddVehicle />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit/:id"
+          element={
+            <ProtectedRoute adminOnly>
+              <EditVehicle />
             </ProtectedRoute>
           }
         />

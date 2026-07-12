@@ -15,6 +15,7 @@ router.use(protect);
 router.post('/', validateCreateVehicle, vehicleController.createVehicle);
 router.get('/', vehicleController.getVehicles);
 router.get('/search', vehicleController.searchVehicles);
+router.get('/:id', vehicleController.getVehicleById);
 router.put('/:id', validateUpdateVehicle, vehicleController.updateVehicle);
 router.delete('/:id', authorize('ADMIN'), vehicleController.deleteVehicle);
 
